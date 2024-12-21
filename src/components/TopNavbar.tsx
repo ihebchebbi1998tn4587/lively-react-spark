@@ -34,7 +34,7 @@ const TopNavbar = () => {
 
             <button
               onClick={() => setIsStoreModalOpen(true)}
-              className="flex items-center gap-2 text-sm text-white whitespace-nowrap hover:text-accent transition-colors duration-300 py-2 px-3 rounded-lg active:bg-white/10"
+              className="hidden sm:flex items-center gap-2 text-sm text-white whitespace-nowrap hover:text-accent transition-colors duration-300 py-2 px-3 rounded-lg active:bg-white/10"
             >
               <MapPin size={18} />
               <span className="hidden xs:inline">TROUVER UNE BOUTIQUE</span>
@@ -64,6 +64,7 @@ const TopNavbar = () => {
         menuItems={menuItems}
         expandedItem={expandedItem}
         onToggleSubmenu={toggleSubmenu}
+        onStoreClick={() => setIsStoreModalOpen(true)}
       />
     </div>
   );

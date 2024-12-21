@@ -1,5 +1,5 @@
 import React from 'react';
-import { X } from 'lucide-react';
+import { X, MapPin } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import MobileMenuItem from './MobileMenuItem';
 
@@ -9,6 +9,7 @@ interface MobileMenuProps {
   menuItems: any[];
   expandedItem: string | null;
   onToggleSubmenu: (title: string) => void;
+  onStoreClick: () => void;
 }
 
 const MobileMenu = ({
@@ -17,6 +18,7 @@ const MobileMenu = ({
   menuItems,
   expandedItem,
   onToggleSubmenu,
+  onStoreClick,
 }: MobileMenuProps) => {
   return (
     <>
@@ -51,6 +53,16 @@ const MobileMenu = ({
                       onToggle={() => onToggleSubmenu(item.title)}
                     />
                   ))}
+                  
+                  <li className="mt-4 border-t border-white/10 pt-4">
+                    <button
+                      onClick={onStoreClick}
+                      className="w-full flex items-center gap-3 text-white hover:text-accent transition-colors duration-300 py-3 px-4 rounded-lg hover:bg-white/5"
+                    >
+                      <MapPin size={20} />
+                      <span className="text-lg">Trouver une boutique</span>
+                    </button>
+                  </li>
                 </ul>
               </div>
             </motion.div>
