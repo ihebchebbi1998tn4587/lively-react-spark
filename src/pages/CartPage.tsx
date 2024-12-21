@@ -11,7 +11,7 @@ import { UserDetails, getUserDetails } from '@/utils/userDetailsStorage';
 import BackButton from '@/components/cart/BackButton';
 import EmptyCartMessage from '@/components/cart/EmptyCartMessage';
 
-// Lazy load components that might not be immediately needed
+// Lazy load components for better performance
 const UserDetailsForm = React.lazy(() => import('@/components/cart/UserDetailsForm'));
 const OrderSummary = React.lazy(() => import('@/components/cart/OrderSummary'));
 const CartItemCard = React.lazy(() => import('@/components/cart/CartItemCard'));
@@ -23,7 +23,7 @@ const CartPage = () => {
   const [userDetails, setUserDetails] = useState<UserDetails | null>(getUserDetails());
   const [isEditing, setIsEditing] = useState(false);
 
-  // Memoize calculations to improve performance
+  // Memoize calculations
   const total = React.useMemo(() => 
     cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0),
     [cartItems]
@@ -60,7 +60,6 @@ const CartPage = () => {
   };
 
   const handleEditDetails = () => setIsEditing(true);
-
   const handleDeleteDetails = () => {
     localStorage.removeItem('userDetails');
     setUserDetails(null);
@@ -85,19 +84,24 @@ const CartPage = () => {
       <Helmet>
         <title>Mon Panier | Fiori - Vêtements Personnalisés</title>
         <meta name="description" content="Gérez votre panier d'achats Fiori. Découvrez notre collection de vêtements personnalisés et haut de gamme en Tunisie." />
-        <meta name="robots" content="noindex, follow" />
+        <meta name="robots" content="index, follow" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="theme-color" content="#700100" />
+        <meta property="og:title" content="Mon Panier | Fiori - Vêtements Personnalisés" />
+        <meta property="og:description" content="Gérez votre panier d'achats Fiori. Découvrez notre collection de vêtements personnalisés et haut de gamme en Tunisie." />
+        <meta property="og:type" content="website" />
         <link rel="canonical" href="https://www.fiori.com/cart" />
       </Helmet>
 
       <TopNavbar />
       <div className="flex-grow">
         <BrandNavbarSection />
-        <div className="container mx-auto px-4 py-4 space-y-4 mt-24">
+        <div className="container mx-auto px-4 py-2 space-y-4 mt-16">
           <BackButton onClick={() => navigate('/')} />
           <motion.h1 
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="text-3xl font-serif text-[#1A1F2C]"
+            className="text-2xl md:text-3xl font-serif text-[#1A1F2C] mt-4"
           >
             Mon Panier ({cartItems.length} articles)
           </motion.h1>
@@ -105,10 +109,15 @@ const CartPage = () => {
           {cartItems.length === 0 ? (
             <EmptyCartMessage onNavigate={() => navigate('/')} />
           ) : (
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-              <div className="lg:col-span-2 space-y-6">
-                <div className="space-y-4 bg-white/50 p-6 rounded-xl backdrop-blur-sm shadow-sm">
-                  <Suspense fallback={<div className="animate-pulse h-96 bg-gray-100 rounded-lg" />}>
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-8">
+              <div className="lg:col-span-2 space-y-4 md:space-y-6">
+                <div className="space-y-4 bg-white/50 p-4 md:p-6 rounded-xl backdrop-blur-sm shadow-sm">
+                  <Suspense fallback={
+                    <div className="animate-pulse space-y-4">
+                      <div className="h-24 bg-gray-200 rounded-lg"></div>
+                      <div className="h-24 bg-gray-200 rounded-lg"></div>
+                    </div>
+                  }>
                     {cartItems.map((item) => (
                       <CartItemCard
                         key={item.id}
@@ -121,8 +130,10 @@ const CartPage = () => {
                 </div>
                 
                 {(!userDetails || isEditing) && (
-                  <div className="bg-white/50 p-6 rounded-xl backdrop-blur-sm shadow-sm">
-                    <Suspense fallback={<div className="animate-pulse h-96 bg-gray-100 rounded-lg" />}>
+                  <div className="bg-white/50 p-4 md:p-6 rounded-xl backdrop-blur-sm shadow-sm">
+                    <Suspense fallback={
+                      <div className="animate-pulse h-96 bg-gray-200 rounded-lg"></div>
+                    }>
                       <UserDetailsForm 
                         onComplete={handleFormComplete}
                         initialData={userDetails}
@@ -133,7 +144,9 @@ const CartPage = () => {
               </div>
               
               <div className="lg:sticky lg:top-8">
-                <Suspense fallback={<div className="animate-pulse h-96 bg-gray-100 rounded-lg" />}>
+                <Suspense fallback={
+                  <div className="animate-pulse h-96 bg-gray-200 rounded-lg"></div>
+                }>
                   <OrderSummary
                     total={total}
                     shipping={shipping}
